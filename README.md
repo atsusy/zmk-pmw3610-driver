@@ -1,3 +1,12 @@
+> **Fork note (Zephyr 4.x support):** This is a fork of
+> [kumamuk-git/zmk-pmw3610-driver](https://github.com/kumamuk-git/zmk-pmw3610-driver).
+> ZMK on **Zephyr 4.1** ships a built-in `pixart,pmw3610` input binding, which collides with this
+> driver's same-named binding (`devicetree error: ... duplicate compatible on-bus spi`).
+> To let this driver's driver-level discrete scrolling (`CONFIG_PMW3610_SCROLL_TICK`, `scroll-layers`)
+> build on current ZMK/Zephyr 4.x, the **compatible is renamed to `pixart,pmw3610-kuma`**
+> (binding + `DT_DRV_COMPAT`). Kconfig symbols (`CONFIG_PMW3610*`) are unchanged. Use
+> `compatible = "pixart,pmw3610-kuma";` on the trackball node (see example below).
+
 PMW3610 driver implementation for ZMK with at least Zephyr 3.5
 
 This work is based on [ufan's implementation](https://github.com/ufan/zmk/tree/support-trackpad) of the driver.
@@ -69,7 +78,7 @@ Now, update your `board.overlay` adding the necessary bits (update the pins for 
 
     trackball: trackball@0 {
         status = "okay";
-        compatible = "pixart,pmw3610";
+        compatible = "pixart,pmw3610-kuma";
         reg = <0>;
         spi-max-frequency = <2000000>;
         irq-gpios = <&gpio0 6 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
